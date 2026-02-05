@@ -1,0 +1,58 @@
+/* Make sure the map has height, otherwise it won't show up */
+#map {
+    height: 500px;
+    width: 100%;
+    margin-top: 20px;
+    background-color: #f0f0f0;
+    /* Grey background to show where map should be */
+}
+
+#results {
+    margin-top: 20px;
+}
+
+.place-item {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+body {
+    font-family: sans-serif;
+    padding: 20px;
+}
+
+/* Drag and Drop Styles */
+.location-item {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.location-item.dragging {
+    opacity: 0.5;
+    background: #e0e0e0;
+}
+
+.location-item.drag-over {
+    border-top: 2px solid #4285F4;
+    transform: translateY(2px);
+}
+
+/* Profile Styles */
+.profile-pic {
+    border: 3px solid white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Gen Z Aesthetic - Global Lowercase */
+* {
+    text-transform: lowercase;
+}
+
+/* Exceptions: Inputs should usually allow normal typing unless explicitly styled, 
+   but user requested "everything lowercase". 
+   We often keep inputs normal so user knows what they typed (e.g. passwords).
+   However, for the aesthetic, we can force visual lowercase. */
+input,
+select,
+textarea {
+    text-transform: lowercase;
+}

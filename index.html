@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Midpoint Finder</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h1>Midpoint Finder</h1>
+        <div id="authContainer">
+            <!-- Logged Out State -->
+            <button id="loginBtn" onclick="toggleAuthModal()">Login / Sign Up</button>
+
+            <!-- Logged In State (Hidden by default) -->
+            <div id="userDisplay" style="display: none;">
+                <span id="welcomeMsg">Welcome</span>
+                <button onclick="toggleHistoryModal()">📜 History</button>
+                <button onclick="toggleProfileModal()">👤 Profile</button>
+                <button onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div style="margin-bottom: 5px;">
+            <label for="addressA">location a:</label>
+            <gmp-place-autocomplete id="addressA" style="width: 200px;"></gmp-place-autocomplete>
+            <select id="modeA">
+                <option value="">select mode of transportation</option>
+                <option value="DRIVING">🚗 driving</option>
+                <option value="TRANSIT">🚍 public transit</option>
+                <option value="WALKING">🚶 walking</option>
+                <option value="BICYCLING">🚲 biking</option>
+            </select>
+            <div id="chipsA" style="font-size: 0.8em; margin-top: 2px;"></div>
+        </div>
+        <div style="margin-bottom: 5px;">
+            <label for="addressB">location b:</label>
+            <gmp-place-autocomplete id="addressB" style="width: 200px;"></gmp-place-autocomplete>
+            <select id="modeB">
+                <option value="">select mode of transportation</option>
+                <option value="DRIVING">🚗 driving</option>
+                <option value="TRANSIT">🚍 public transit</option>
+                <option value="WALKING">🚶 walking</option>
+                <option value="BICYCLING">🚲 biking</option>
+            </select>
+            <div id="chipsB" style="font-size: 0.8em; margin-top: 2px;"></div>
+        </div>
+        <div style="margin-bottom: 5px;">
+            <label for="departureTime">Departure Time:</label>
+            <input type="datetime-local" id="departureTime" style="width: 200px;">
+            <button type="button" onclick="document.getElementById('departureTime').value = '';">Clear</button>
+        </div>
+        <div style="margin-bottom: 5px;">
+            <label for="placeType">place type:</label>
+            <input type="text" id="placeType" placeholder="e.g. coffee shop" style="width: 200px;">
+            <select id="sortPreference">
+                <option value="">select prioritization type</option>
+                <option value="FAIRNESS">prioritize fairness</option>
+                <option value="SPEED">prioritize total speed</option>
+            </select>
+
+        </div>
+        <button onclick="findMidpoint()">Find Midpoint</button>
+        <button onclick="shareSearch()">📤 Share</button>
+    </div>
+
+    <!-- The Map -->
+    <div id="map"></div>
+
+    <!-- Results List -->
+    <div id="results"></div>
+    <script src="script.js"></script>
+    <script async
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEbd7gtsrbfd7qZwr1hxeNdlbzei_8DOc&libraries=places,geometry,marker&callback=initMap&loading=async">
+        </script>
+    <!-- Saved Meetings Modal -->
+
+
+    <!-- History Modal -->
+    <div id="historyModal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5);">
+        <div
+            style="background: white; padding: 20px; margin: 100px auto; width: 400px; border-radius: 5px; max-height: 80vh; overflow-y: auto; position: relative;">
+            <button onclick="toggleHistoryModal()"
+                style="position: absolute; top: 10px; right: 10px; border: none; background: transparent; font-size: 1.2rem; cursor: pointer;">✕</button>
+            <h2 style="margin-top: 20px; text-align: center;">Search History</h2>
+            <div id="historyList">
+                <!-- Items will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div id="profileModal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5);">
+        <div
+            style="background: white; padding: 20px; margin: 50px auto; width: 500px; border-radius: 5px; max-height: 90vh; overflow-y: auto; position: relative;">
+            <button onclick="toggleProfileModal()"
+                style="position: absolute; top: 10px; right: 10px; border: none; background: transparent; font-size: 1.2rem; cursor: pointer;">✕</button>
+
+            <div
+                style="display: flex; justify-content: center; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 20px; margin-top: 20px;">
+                <h2 style="margin: 0;">My Profile</h2>
+            </div>
+
+            <!-- My Info Section -->
+            <div style="margin-bottom: 30px;">
+                <div id="myInfoContainer">
+                    <!-- Injected via script.js -->
+                </div>
+            </div>
+
+
+            <!-- Preferences Section -->
+            <div style="margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 20px;">
+                <h3>⚙️ Preferences</h3>
+                <div style="margin-bottom: 10px;">
+                    <label>Default Travel Mode:</label>
+                    <select id="prefDefaultMode">
+                        <option value="">no preference</option>
+                        <option value="DRIVING">🚗 driving</option>
+                        <option value="TRANSIT">🚍 public transit</option>
+                        <option value="WALKING">🚶 walking</option>
+                        <option value="BICYCLING">🚲 biking</option>
+                    </select>
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label>Default Place Type:</label>
+                    <input type="text" id="prefDefaultType" placeholder="e.g. Coffee Shop" style="width: 200px;">
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label>Default Prioritization:</label>
+                    <select id="prefDefaultSort">
+                        <option value="">no preference</option>
+                        <option value="FAIRNESS">prioritize fairness</option>
+                        <option value="SPEED">prioritize total speed</option>
+                    </select>
+                </div>
+                <button onclick="handleSavePreferences()">Save Preferences</button>
+            </div>
+
+            <!-- Saved Locations Section (Moved here) -->
+            <div>
+                <h3>📍 Saved Locations</h3>
+                <div id="locationsList" style="margin-bottom: 20px;">
+                    <!-- Existing chips/list -->
+                </div>
+
+                <h4>Add New Location</h4>
+                <div style="margin-bottom: 5px;">
+                    <input type="text" id="newLocAlias" placeholder="Name (e.g. Home)" style="width: 100px;">
+                </div>
+                <div style="margin-bottom: 5px;">
+                    <gmp-place-autocomplete id="newLocAddress" placeholder="Address"
+                        style="width: 100%;"></gmp-place-autocomplete>
+                </div>
+                <button onclick="handleAddLocation()">Save Location</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth Modal -->
+    <div id="authModal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5);">
+        <div
+            style="background: white; padding: 20px; margin: 100px auto; width: 300px; border-radius: 5px; position: relative;">
+            <button onclick="toggleAuthModal()"
+                style="position: absolute; top: 10px; right: 10px; border: none; background: transparent; font-size: 1.2rem; cursor: pointer;">✕</button>
+            <h2 id="modalTitle" style="margin-top: 20px; text-align: center;">Login</h2>
+            <div id="nameFields" style="display: none;">
+                <input type="text" id="authFirstName" placeholder="First Name"
+                    style="width: 100%; margin-bottom: 10px;">
+                <input type="text" id="authLastName" placeholder="Last Name" style="width: 100%; margin-bottom: 10px;">
+            </div>
+            <input type="email" id="authEmail" placeholder="Email" style="width: 100%; margin-bottom: 10px;">
+            <input type="password" id="authPassword" placeholder="Password" style="width: 100%; margin-bottom: 10px;">
+            <button onclick="handleAuth()">Submit</button>
+            <p>
+                <small id="authToggleText">Need an account? <a href="#" onclick="switchAuthMode()">Sign Up</a></small>
+            </p>
+        </div>
+    </div>
+</body>
+
+</html>

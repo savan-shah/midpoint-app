@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "pwa-chrome",
+            "request": "launch",
+            "name": "Open index.html",
+            "file": "${workspaceFolder}/index.html"
+        },
+        {
+            "type": "pwa-msedge",
+            "request": "launch",
+            "name": "Open index.html (Edge)",
+            "file": "${workspaceFolder}/index.html"
+        }
+    ]
+}
