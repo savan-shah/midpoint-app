@@ -1,0 +1,52 @@
+/* Priority Selection Cards */
+.priority-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 0.5rem;
+}
+
+.priority-card {
+    background: var(--bg-input);
+    border: 1px solid transparent;
+    /* Reserve space for border */
+    border-radius: var(--radius-md);
+    padding: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s var(--ease-spring);
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    height: 100%;
+}
+
+.priority-card:hover {
+    background: #eef3eb;
+    /* Slightly darker than bg-input */
+    transform: translateY(-1px);
+}
+
+.priority-card.selected {
+    background: var(--secondary);
+    border-color: var(--primary);
+    color: var(--primary);
+    box-shadow: var(--shadow-sm);
+}
+
+.priority-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: inherit;
+}
+
+.priority-desc {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.priority-card.selected .priority-desc {
+    color: var(--primary);
+    /* Match parent in selected state */
+    opacity: 0.9;
+}
