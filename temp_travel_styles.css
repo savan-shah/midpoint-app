@@ -1,0 +1,48 @@
+/* Place Detail Travel Cards */
+.place-detail-travel {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.place-detail-travel-item {
+    flex: 1;
+    min-width: 140px;
+    background: var(--bg-input);
+    /* Light background */
+    padding: 1rem;
+    border-radius: var(--radius-lg);
+    /* Rounded corners like screenshot */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    border: none;
+    box-shadow: var(--shadow-sm);
+    /* Subtle shadow for clean look */
+    transition: transform 0.2s ease;
+}
+
+.place-detail-travel-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.travel-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.travel-time {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary);
+    /* Forest Green text for time */
+}
